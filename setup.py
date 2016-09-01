@@ -47,8 +47,9 @@ setup(
 
     install_requires=[
         'setuptools',
-        'plone.dexterity',
+        'collective.monkeypatcher',
         'plone.app.dexterity',
+        'plone.dexterity',
         'Plone',
     ],
 

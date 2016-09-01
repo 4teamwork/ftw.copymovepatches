@@ -1,5 +1,15 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five">
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    i18n_domain="ftw.copymovepatches">
+
+    <monkey:patch
+        description="Backport dexterity copy flags"
+        class="plone.dexterity.content.PasteBehaviourMixin"
+        original="_getCopy"
+        replacement=".dx_copy_flags.PasteBehaviourMixin_getCopy"
+        ignoreOriginal="True"
+        />
 
 </configure>
