@@ -51,6 +51,7 @@ setup(
         'plone.app.dexterity',
         'plone.dexterity',
         'Plone',
+        'plone.api',
     ],
 
     tests_require=tests_require,

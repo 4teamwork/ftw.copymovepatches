@@ -4,7 +4,32 @@
 Introduction
 ============
 
-### INTRODUCTION ###
+This package implements some magical improvements compared to the default plone copy/move/rename implementation.
+
+As far as we manage to get changes in to Plone/CMFCore this packages is no longer necessary.
+
+
+
+Lighting fast move/rename
+--------------------------
+This package provides a improved move/rename implementation.
+The more files you want to move the faster it will be compared to the default Plone implementation.
+
+Basically it does not an uncatalog an afterwards a catalog of the obejct, but updates
+the indexed data where necessary. This saves us from reindexing the whole moved
+structure.
+The main issue was that the searchableText from Files was indexed again.
+
+
+Example measurement with 1 Folder, which contains 1 Document and 300 Files (almost empty PDFs):
+
+Plone: approx. 80s
+With this package: approx. 8s
+
+PR for this change is open at: XXX (Add URL to PR)
+
+
+
 
 
 Backport of dexterity patch: set copy flags
@@ -46,11 +71,6 @@ Installation
         ...
         ftw.copymovepatches
 
-
-Usage
-=====
-
-### USAGE ###
 
 Development
 ===========
