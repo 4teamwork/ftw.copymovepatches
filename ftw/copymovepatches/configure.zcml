@@ -4,6 +4,8 @@
     xmlns:monkey="http://namespaces.plone.org/monkey"
     i18n_domain="ftw.copymovepatches">
 
+    <include package=".browser" />
+
     <monkey:patch
         description="Backport dexterity copy flags"
         class="plone.dexterity.content.PasteBehaviourMixin"

@@ -52,6 +52,13 @@ same behavior as it used to be with AT, which does fix the error.
 - Plone 4 fix: https://github.com/plone/plone.dexterity/pull/60
 - Plone 5 fix: https://github.com/plone/plone.dexterity/pull/61
 
+**Fix inconsistent state:**
+
+Without this patch, copy / paste could lead to incosinstent state.
+When you've installed ``ftw.copymovepatches`` on an existing installation
+you should visit the view ``copymovepatches-catalog-fixes`` on the site root
+and run the fixes when proposed.
+
 
 Compatibility
 -------------
