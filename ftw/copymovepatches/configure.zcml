@@ -12,4 +12,12 @@
         ignoreOriginal="True"
         />
 
+    <monkey:patch
+        description="Implement fast move/rename"
+        module="Products.CMFCore.CMFCatalogAware"
+        original="handleContentishEvent"
+        replacement=".cmfcatalogaware.handleContentishEvent"
+        handler=".cmfcatalogaware.apply_patch"
+        />
+
 </configure>
