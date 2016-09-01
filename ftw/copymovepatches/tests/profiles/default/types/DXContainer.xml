@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="DXContainer"
+        meta_type="Dexterity FTI"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="ftw.copymovepatches">
+
+    <property name="title">DXContainer</property>
+    <property name="global_allow">True</property>
+    <property name="filter_content_types">False</property>
+    <property name="klass">plone.dexterity.content.Container</property>
+    <property name="behaviors">
+        <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+        <element value="plone.app.content.interfaces.INameFromTitle" />
+    </property>
+
+</object>

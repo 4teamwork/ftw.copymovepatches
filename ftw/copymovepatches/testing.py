@@ -1,10 +1,12 @@
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from zope.configuration import xmlconfig
+import ftw.copymovepatches.tests.builders
 
 
 class FtwLayer(PloneSandboxLayer):
@@ -16,11 +18,12 @@ class FtwLayer(PloneSandboxLayer):
             '  <include package="z3c.autoinclude" file="meta.zcml" />'
             '  <includePlugins package="plone" />'
             '  <includePluginsOverrides package="plone" />'
+            '  <include package="ftw.copymovepatches.tests" file="profiles.zcml" />'
             '</configure>',
             context=configurationContext)
 
     def setUpPloneSite(self, portal):
-        pass
+        applyProfile(portal, 'ftw.copymovepatches.tests:default')
 
 
 FTW_FIXTURE = FtwLayer()
