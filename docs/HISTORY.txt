@@ -5,4 +5,7 @@ Changelog
 1.0.0 (unreleased)
 --------------------
 
+- Init Implementation.
+  [jone & mathias.leimgruber]
+
 - Package generated using bobtemplates.4teamwork
