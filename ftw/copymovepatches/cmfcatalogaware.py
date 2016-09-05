@@ -83,12 +83,16 @@ def handleContentishEvent(ob, event):
             delattr(ob, '__rid')
 
     elif IObjectWillBeMovedEvent.providedBy(event):
-        if event.oldParent is not None:
+        # Move/Rename
+        if event.oldParent is not None and event.newParent is not None:
             catalog = api.portal.get_tool('portal_catalog')
             ob_path = '/'.join(ob.getPhysicalPath())
             rid = catalog._catalog.uids[ob_path]
 
             setattr(ob, '__rid', rid)
+        else:
+            # Delete
+            ob.unindexObject()
 
     elif IObjectCopiedEvent.providedBy(event):
         if hasattr(aq_base(ob), 'workflow_history'):

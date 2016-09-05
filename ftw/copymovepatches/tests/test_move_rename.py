@@ -85,3 +85,10 @@ class TestRenameMove(FunctionalTestCase):
 
         new_path = '/'.join(self.target.objectValues()[0].getPhysicalPath())
         self.assertNotEquals(rid, self.catalog._catalog.uids[new_path])
+
+    def test_crosscheck_delete_still_works(self):
+        old_path = '/'.join(self.source.getPhysicalPath())
+        self.portal.manage_delObjects([self.source.getId()])
+
+        self.assertFalse(len(self.catalog(path=old_path)),
+                         'No longer expecting this item in the catalog')
