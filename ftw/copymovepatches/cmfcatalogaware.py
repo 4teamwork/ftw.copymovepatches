@@ -62,35 +62,49 @@ def handleContentishEvent(ob, event):
 
     elif IObjectMovedEvent.providedBy(event):
         if event.newParent is not None:
-            rid = getattr(ob, '__rid')
-            catalog = api.portal.get_tool('portal_catalog')
-            _catalog = catalog._catalog
+            rid = getattr(ob, '__rid', None)
 
-            new_path = '/'.join(ob.getPhysicalPath())
-            old_path = _catalog.paths[rid]
+            if rid:
+                catalog = api.portal.get_tool('portal_catalog')
+                _catalog = catalog._catalog
 
-            del _catalog.uids[old_path]
-            _catalog.uids[new_path] = rid
-            _catalog.paths[rid] = new_path
+                new_path = '/'.join(ob.getPhysicalPath())
+                old_path = _catalog.paths[rid]
 
-            ob.reindexObject(idxs=[
-                'path',
-                'allowedRolesAndUsers',
-                'modified',
-                'id',
-                'getId'])
+                del _catalog.uids[old_path]
+                _catalog.uids[new_path] = rid
+                _catalog.paths[rid] = new_path
 
-            delattr(ob, '__rid')
+                ob.reindexObject(idxs=[
+                    'path',
+                    'allowedRolesAndUsers',
+                    'modified',
+                    'id',
+                    'getId'])
+
+                delattr(ob, '__rid')
+            elif event.newParent is not None:
+                # This may happen if "collective.indexing" is installed and an object
+                # is added and renamed/moved in the same transaction (e.g. during the
+                # creation of an object with "plone.api" in a subscriber listening
+                # on "IObjectAddedEvent" as in https://github.com/4teamwork/ftw.events/blob/f1a77440866c6d963961497f68781098c1b4bc8f/ftw/events/configure.zcml#L22).
+                ob.indexObject()
 
     elif IObjectWillBeMovedEvent.providedBy(event):
         # Move/Rename
         if event.oldParent is not None and event.newParent is not None:
             catalog = api.portal.get_tool('portal_catalog')
             ob_path = '/'.join(ob.getPhysicalPath())
-            rid = catalog._catalog.uids[ob_path]
-
-            setattr(ob, '__rid', rid)
-        else:
+            if ob_path in catalog._catalog.uids:
+                rid = catalog._catalog.uids[ob_path]
+                setattr(ob, '__rid', rid)
+            else:
+                # This may happen if "collective.indexing" is installed and an object
+                # is added and renamed/moved in the same transaction (e.g. during the
+                # creation of an object with "plone.api" in a subscriber listening
+                # on "IObjectAddedEvent" as in https://github.com/4teamwork/ftw.events/blob/f1a77440866c6d963961497f68781098c1b4bc8f/ftw/events/configure.zcml#L22).
+                return
+        elif event.oldParent is not None:
             # Delete
             ob.unindexObject()
 

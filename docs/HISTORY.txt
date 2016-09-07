@@ -5,7 +5,10 @@ Changelog
 1.0.0a3 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Make add-on more robust by handling a special case which may happen when
+  "collective.indexing" is installed and an object is created with "plone.api"
+  in a subscriber listening on "IObjectAddedEvent".
+  [mbaechtold, mathias.leimgruber]
 
 
 1.0.0a2 (2016-09-05)
