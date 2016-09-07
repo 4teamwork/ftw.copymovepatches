@@ -29,6 +29,18 @@ With this package: approx. 8s
 PR for this change is open at: XXX (Add URL to PR)
 
 
+Update modification date when moving
+------------------------------------
+
+When building cache keys based on the modification dates of objects it is
+crucial that the modification dates are updated on any change.
+By default, the modification date is updated when the *content* is changed,
+which is not the case when moving objects around.
+
+The "move"-patch in this package changes the behavior so that a "move" will
+also trigger a modification date update and thus give caches the chance to
+invalidate when they are built with the modification date and need to be
+invalidated when the path is updated.
 
 
 

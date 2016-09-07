@@ -62,6 +62,9 @@ def handleContentishEvent(ob, event):
 
     elif IObjectMovedEvent.providedBy(event):
         if event.newParent is not None:
+            if hasattr(aq_base(ob), 'notifyModified'):
+                ob.notifyModified()
+
             rid = getattr(ob, '__rid', None)
 
             if rid:
