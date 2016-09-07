@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.0a4 (unreleased)
+1.0.0a4 (2016-09-07)
 --------------------
 
 - Update modification date when moving an object. [jone]
