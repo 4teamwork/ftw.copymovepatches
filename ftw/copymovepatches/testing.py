@@ -5,6 +5,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
+from plone.testing import z2
 from zope.configuration import xmlconfig
 import ftw.copymovepatches.tests.builders
 
@@ -21,6 +22,8 @@ class FtwLayer(PloneSandboxLayer):
             '  <include package="ftw.copymovepatches.tests" file="profiles.zcml" />'
             '</configure>',
             context=configurationContext)
+
+        z2.installProduct(app, 'collective.indexing')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.copymovepatches.tests:default')

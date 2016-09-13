@@ -2,10 +2,11 @@ Changelog
 =========
 
 
-1.0.0a5 (unreleased)
---------------------
+1.0.0 (unreleased)
+------------------
 
-- Nothing changed yet.
+- Fix edge case with collective.indexing and other 3rd party packages and rename a nested structure.
+  [mathias.leimgruber]
 
 
 1.0.0a4 (2016-09-07)

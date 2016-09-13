@@ -1,12 +1,13 @@
 from setuptools import setup, find_packages
 
-version = '1.0.0a5.dev0'
+version = '1.0.0.dev0'
 maintainer = '4teamwork'
 
 tests_require = [
+    'collective.indexing',
     'ftw.builder',
-    'ftw.testing',
     'ftw.testbrowser',
+    'ftw.testing',
     'plone.app.testing',
     'plone.testing',
 ]
