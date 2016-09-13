@@ -6,6 +6,15 @@ from zope.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 import inspect
+import pkg_resources
+
+
+try:
+    pkg_resources.get_distribution('collective.indexing')
+except pkg_resources.DistributionNotFound:
+    HAS_C_INDEXING = False
+else:
+    HAS_C_INDEXING = True
 
 
 """This is the original method, we are replacing:
@@ -94,6 +103,21 @@ def handleContentishEvent(ob, event):
                 ob.indexObject()
 
     elif IObjectWillBeMovedEvent.providedBy(event):
+
+        # Prepare Rename if collective.indexing is
+        if HAS_C_INDEXING and (event.oldParent == event.newParent):
+            # The queue needs to be processed, since the `renameObjectsByPaths`
+            # script allows the user to rename the object and also sets a new
+            # title if he wants.
+            # In some circumstances this leads to a inconsistent catalog state.
+            # Mainly if other event handler also triggers a `process` queue by
+            # asking the catalog for something.
+            # The result was for example a "reindex" of a already deleted
+            # object.
+            from collective.indexing.queue import getQueue
+            queue = getQueue()
+            queue.process()
+
         # Move/Rename
         if event.oldParent is not None and event.newParent is not None:
             catalog = api.portal.get_tool('portal_catalog')
@@ -132,4 +156,5 @@ def marmoset_patch(old, new, extra_globals={}):
 def apply_patch(scope, original, replacement):
     marmoset_patch(scope.handleContentishEvent,
                    replacement,
-                   {'api': api})
+                   {'api': api,
+                    'HAS_C_INDEXING': HAS_C_INDEXING})

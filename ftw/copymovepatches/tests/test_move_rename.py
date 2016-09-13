@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.copymovepatches.tests import FunctionalTestCase
+from ftw.testbrowser import browsing
 from plone import api
 
 
@@ -92,3 +93,39 @@ class TestRenameMove(FunctionalTestCase):
 
         self.assertFalse(len(self.catalog(path=old_path)),
                          'No longer expecting this item in the catalog')
+
+    @browsing
+    def test_rename_nested_structure(self, browser):
+        subfolder = create(Builder('folder').within(self.source))
+        subdocument = create(Builder('document').within(subfolder))
+
+        old_path_subfolder = '/'.join(subfolder.getPhysicalPath())
+        rid_subfolder = self.catalog._catalog.uids[old_path_subfolder]
+        old_path_subdocument = '/'.join(subdocument.getPhysicalPath())
+        rid_subdocument = self.catalog._catalog.uids[old_path_subdocument]
+
+        # Rename + set new title
+        browser.login().visit(subfolder, view='object_rename')
+        browser.fill({'New Short Name': 'newid',
+                      'New Title': 'Changed Title'}).submit()
+
+        # Check Folder
+        new_path_subfolder = '/'.join(self.source['newid'].getPhysicalPath())
+        self.assertEquals(rid_subfolder,
+                          self.catalog._catalog.uids[new_path_subfolder])
+        self.assertNotEquals(old_path_subfolder, new_path_subfolder)
+
+        # Check Document
+        new_path_subdocument = '/'.join(
+            self.source['newid'][subdocument.getId()].getPhysicalPath())
+        self.assertEquals(rid_subdocument,
+                          self.catalog._catalog.uids[new_path_subdocument])
+        self.assertNotEquals(old_path_subfolder, new_path_subfolder)
+
+        # Crosscheck catalog search
+        self.assertEquals(2, len(self.catalog(path=new_path_subfolder)))
+        self.assertEquals(1, len(self.catalog(path=new_path_subdocument)))
+
+        # Chrosscheck uid catalog
+        uid_index = self.catalog._catalog.getIndex('UID')
+        self.assertEquals(len(uid_index._index), len(uid_index._unindex))
