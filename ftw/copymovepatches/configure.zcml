@@ -4,6 +4,8 @@
     xmlns:monkey="http://namespaces.plone.org/monkey"
     i18n_domain="ftw.copymovepatches">
 
+    <include package="collective.monkeypatcher" />
+
     <include package=".browser" />
 
     <monkey:patch

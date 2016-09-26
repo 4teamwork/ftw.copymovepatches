@@ -5,7 +5,7 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ZCML: Include monkeypatcher before using it. [jone]
 
 
 1.0.0 (2016-09-13)
