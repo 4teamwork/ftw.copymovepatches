@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.copymovepatches.tests import FunctionalTestCase
 from ftw.testbrowser import browsing
+from plone.uuid.interfaces import ATTRIBUTE_NAME
 from plone.uuid.interfaces import IUUID
 from plone.uuid.interfaces import IUUIDGenerator
 from Products.Archetypes import config
@@ -32,6 +33,7 @@ class TestCatalogFixesView(FunctionalTestCase):
             browser.css('.uid-index-state-check').first.text)
 
     @browsing
+    # @skipIf(IS_PLONE_5, 'We no longer create AT content within DX.')
     def test_rebuild_broken_brain_metadata(self, browser):
         self.grant('Manager')
         page = create(Builder('page'))
@@ -68,6 +70,16 @@ class TestCatalogFixesView(FunctionalTestCase):
         # Change UID so that brain metadata is incorrect.
         # This used to happen on copy/paste without the patch provided
         # by this package.
-        setattr(obj, config.UUID_ATTR, getUtility(IUUIDGenerator)())
+        self._change_uid(obj)
 
         transaction.commit()
+
+    def _change_uid(self, obj):
+
+        # Change UID for Archetypes:
+        if hasattr(obj, config.UUID_ATTR):
+            setattr(obj, config.UUID_ATTR, getUtility(IUUIDGenerator)())
+
+        # Change UID for Dexterity:
+        if hasattr(obj, ATTRIBUTE_NAME):
+            setattr(obj, ATTRIBUTE_NAME, getUtility(IUUIDGenerator)())
