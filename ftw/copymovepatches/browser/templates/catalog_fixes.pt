@@ -23,7 +23,7 @@
                 (length difference between forward and backward index BTree).
                 The index should be rebuilt from scratch. <br />
                 &raquo;
-                <a tal:attributes="href string:${portal_url}/copymovepatches-catalog-fixes/rebuild_uid_index">Rebuild UID index</a>
+                <a tal:attributes="href view/rebuild_uid_index_url">Rebuild UID index</a>
             </tal:ERRORS>
             <tal:NOERRORS condition="not:has_index_errors">
                 <b><i>OK:</i></b>
@@ -45,7 +45,7 @@
                     The UID value in the brain metadata should be recalculated.
                     <br />
                     &raquo;
-                    <a tal:attributes="href string:${portal_url}/copymovepatches-catalog-fixes/rebuild_brain_metadata">Rebuild brain metadata</a>
+                    <a tal:attributes="href view/rebuild_brain_metadata_url">Rebuild brain metadata</a>
                 </tal:ERRORS>
                 <tal:NOERRORS condition="not:brain_metadata_uid_errors">
                     <b><i>OK</i></b>
