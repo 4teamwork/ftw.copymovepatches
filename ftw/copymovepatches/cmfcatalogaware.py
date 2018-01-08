@@ -104,8 +104,10 @@ def handleContentishEvent(ob, event):
 
     elif IObjectWillBeMovedEvent.providedBy(event):
 
+        from ftw.copymovepatches.utils import IS_PLONE_5
+
         # Prepare Rename if collective.indexing is
-        if HAS_C_INDEXING and (event.oldParent == event.newParent):
+        if IS_PLONE_5 or (HAS_C_INDEXING and (event.oldParent == event.newParent)):
             # The queue needs to be processed, since the `renameObjectsByPaths`
             # script allows the user to rename the object and also sets a new
             # title if he wants.
@@ -114,7 +116,10 @@ def handleContentishEvent(ob, event):
             # asking the catalog for something.
             # The result was for example a "reindex" of a already deleted
             # object.
-            from collective.indexing.queue import getQueue
+            if IS_PLONE_5:
+                from Products.CMFCore.indexing import getQueue
+            else:
+                from collective.indexing.queue import getQueue
             queue = getQueue()
             queue.process()
 

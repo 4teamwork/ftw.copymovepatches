@@ -3,6 +3,11 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.ZCatalog.ProgressHandler import ZLogHandler
+from ftw.copymovepatches.utils import IS_PLONE_5
+
+
+if IS_PLONE_5:
+    from plone.protect.utils import addTokenToUrl
 
 
 class CatalogFixes(BrowserView):
@@ -71,3 +76,17 @@ class CatalogFixes(BrowserView):
         response = self.request.RESPONSE
         target = '/'.join((self.context.portal_url(), self.__name__))
         return response.redirect(target)
+
+    @property
+    def rebuild_uid_index_url(self):
+        url = self.context.portal_url() + '/copymovepatches-catalog-fixes/rebuild_uid_index'
+        if IS_PLONE_5:
+            return addTokenToUrl(url)
+        return url
+
+    @property
+    def rebuild_brain_metadata_url(self):
+        url = self.context.portal_url() + '/copymovepatches-catalog-fixes/rebuild_brain_metadata'
+        if IS_PLONE_5:
+            return addTokenToUrl(url)
+        return url

@@ -1,6 +1,7 @@
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
+from ftw.copymovepatches.utils import IS_PLONE_5
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -23,10 +24,14 @@ class FtwLayer(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
-        z2.installProduct(app, 'collective.indexing')
+        if not IS_PLONE_5:
+            z2.installProduct(app, 'collective.indexing')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.copymovepatches.tests:default')
+
+        if IS_PLONE_5:
+            applyProfile(portal, 'plone.app.contenttypes:default')
 
 
 FTW_FIXTURE = FtwLayer()
