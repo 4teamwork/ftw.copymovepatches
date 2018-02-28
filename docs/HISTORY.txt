@@ -7,6 +7,8 @@ Changelog
 
 - Add support for Plone 5.1. [mbaechtold]
 
+- Add support for Products.CMFCore >= 2.2.11 [avoinea]
+
 
 1.0.1 (2016-09-26)
 ------------------

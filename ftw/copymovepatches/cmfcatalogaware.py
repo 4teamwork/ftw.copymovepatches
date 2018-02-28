@@ -1,3 +1,4 @@
+import inspect
 from Acquisition import aq_base
 from OFS.interfaces import IObjectWillBeMovedEvent
 from plone import api
@@ -5,16 +6,8 @@ from zope.container.interfaces import IObjectAddedEvent
 from zope.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-import inspect
-import pkg_resources
-
-
-try:
-    pkg_resources.get_distribution('collective.indexing')
-except pkg_resources.DistributionNotFound:
-    HAS_C_INDEXING = False
-else:
-    HAS_C_INDEXING = True
+from ftw.copymovepatches.utils import HAS_C_INDEXING
+from ftw.copymovepatches.utils import getQueue
 
 
 """This is the original method, we are replacing:
@@ -104,10 +97,8 @@ def handleContentishEvent(ob, event):
 
     elif IObjectWillBeMovedEvent.providedBy(event):
 
-        from ftw.copymovepatches.utils import IS_PLONE_5
-
-        # Prepare Rename if collective.indexing is
-        if IS_PLONE_5 or (HAS_C_INDEXING and (event.oldParent == event.newParent)):
+        # Prepare Rename if indexing queue is implemented
+        if event.oldParent == event.newParent and getQueue is not None:
             # The queue needs to be processed, since the `renameObjectsByPaths`
             # script allows the user to rename the object and also sets a new
             # title if he wants.
@@ -116,10 +107,6 @@ def handleContentishEvent(ob, event):
             # asking the catalog for something.
             # The result was for example a "reindex" of a already deleted
             # object.
-            if IS_PLONE_5:
-                from Products.CMFCore.indexing import getQueue
-            else:
-                from collective.indexing.queue import getQueue
             queue = getQueue()
             queue.process()
 
