@@ -7,7 +7,6 @@ from zope.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from ftw.copymovepatches.utils import HAS_C_INDEXING
-from ftw.copymovepatches.utils import getQueue
 
 
 """This is the original method, we are replacing:
@@ -96,6 +95,8 @@ def handleContentishEvent(ob, event):
                 ob.indexObject()
 
     elif IObjectWillBeMovedEvent.providedBy(event):
+
+        from ftw.copymovepatches.utils import getQueue
 
         # Prepare Rename if indexing queue is implemented
         if event.oldParent == event.newParent and getQueue is not None:
