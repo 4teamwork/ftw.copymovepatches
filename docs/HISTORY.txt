@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.2rc1 (2018-03-01)
+1.0.2rc2 (2018-03-01)
 ---------------------
 
 - Add support for Plone 5.1. [mbaechtold]
