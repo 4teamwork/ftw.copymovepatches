@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 version = '1.1.1.dev0'
 maintainer = '4teamwork'
@@ -22,7 +23,8 @@ setup(
     name='ftw.copymovepatches',
     version=version,
     description='ftw.copymovepatches',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst').read() + '\n'
+    + open(os.path.join('docs', 'HISTORY.txt')).read(),
 
     # Get more strings from
     # http://www.python.org/pypi?%3Aaction=list_classifiers
