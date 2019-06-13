@@ -113,17 +113,24 @@ def handleContentishEvent(ob, event):
 
         # Move/Rename
         if event.oldParent is not None and event.newParent is not None:
-            catalog = api.portal.get_tool('portal_catalog')
-            ob_path = '/'.join(ob.getPhysicalPath())
-            if ob_path in catalog._catalog.uids:
-                rid = catalog._catalog.uids[ob_path]
-                setattr(ob, '__rid', rid)
+            try:
+                catalog = api.portal.get_tool('portal_catalog')
+            except api.exc.CannotGetPortalError:
+                # Happens when renaming a Plone Site in the ZMI.
+                # Then it is best to manually clear and rebuild the catalog later anyway.
+                # But for now do what would happen without our patch.
+                ob.unindexObject()
             else:
-                # This may happen if "collective.indexing" is installed and an object
-                # is added and renamed/moved in the same transaction (e.g. during the
-                # creation of an object with "plone.api" in a subscriber listening
-                # on "IObjectAddedEvent" as in https://github.com/4teamwork/ftw.events/blob/f1a77440866c6d963961497f68781098c1b4bc8f/ftw/events/configure.zcml#L22).
-                return
+                ob_path = '/'.join(ob.getPhysicalPath())
+                if ob_path in catalog._catalog.uids:
+                    rid = catalog._catalog.uids[ob_path]
+                    setattr(ob, '__rid', rid)
+                else:
+                    # This may happen if "collective.indexing" is installed and an object
+                    # is added and renamed/moved in the same transaction (e.g. during the
+                    # creation of an object with "plone.api" in a subscriber listening
+                    # on "IObjectAddedEvent" as in https://github.com/4teamwork/ftw.events/blob/f1a77440866c6d963961497f68781098c1b4bc8f/ftw/events/configure.zcml#L22).
+                    return
         elif event.oldParent is not None:
             # Delete
             ob.unindexObject()
