@@ -83,6 +83,7 @@ def handleContentishEvent(ob, event):
                     'path',
                     'allowedRolesAndUsers',
                     'modified',
+                    'Date',
                     'id',
                     'getId'])
 
