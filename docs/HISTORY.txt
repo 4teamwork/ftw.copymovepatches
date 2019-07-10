@@ -2,10 +2,10 @@ Changelog
 =========
 
 
-1.1.2 (unreleased)
+1.2.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop `copymovepatches-catalog-fixes` view in favour of https://github.com/4teamwork/ftw.catalogdoctor/. [deiferni]
 
 
 1.1.1 (2019-06-19)
