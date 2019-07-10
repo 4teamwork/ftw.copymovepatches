@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.2.0 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
 - Drop `copymovepatches-catalog-fixes` view in favour of https://github.com/4teamwork/ftw.catalogdoctor/. [deiferni]
