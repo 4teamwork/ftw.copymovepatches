@@ -67,9 +67,11 @@ same behavior as it used to be with AT, which does fix the error.
 **Fix inconsistent state:**
 
 Without this patch, copy / paste could lead to incosinstent state.
-When you've installed ``ftw.copymovepatches`` on an existing installation
-you should visit the view ``copymovepatches-catalog-fixes`` on the site root
-and run the fixes when proposed.
+When you've installed ``ftw.copymovepatches`` on an existing installation and
+encounter issues with your catalog consistency your best shot is to try and
+resolve them with ``ftw.catalogdoctor``. See
+https://github.com/4teamwork/ftw.catalogdoctor/ for more information about how
+to install and run the package.
 
 
 Compatibility
